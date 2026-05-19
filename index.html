@@ -109,18 +109,15 @@
            DEVICE FRAME LAYOUT (Sleek Smartphone Frame)
            ========================================================================== */
         .device-container {
-            width: 390px;
-            height: 844px; /* iPhone 12/13/14 standard ratio */
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
             background-color: var(--color-bg-dark);
-            border: 12px solid #2e2e3e;
-            border-radius: 48px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(139, 92, 246, 0.1);
             position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transform: scale(1);
-            transition: transform var(--transition-normal);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
         }
 
         /* Responsive view when loaded inside actual mobile screens */
@@ -130,46 +127,15 @@
                 background-image: none;
             }
             .device-container {
-                width: 100vw;
+                max-width: 100vw;
                 height: 100vh;
-                border: none;
-                border-radius: 0;
                 box-shadow: none;
             }
         }
 
         /* Status Bar & Notch */
         .status-bar {
-            height: 44px;
-            background-color: transparent;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 24px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--color-text-main);
-            z-index: 1000;
-            pointer-events: none;
-            flex-shrink: 0;
-        }
-
-        .status-bar .notch {
-            width: 150px;
-            height: 30px;
-            background-color: #2e2e3e;
-            border-bottom-left-radius: 18px;
-            border-bottom-right-radius: 18px;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .status-icons {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            display: none;
         }
 
         /* Bottom Navigation Bar */
@@ -182,7 +148,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding-bottom: 8px;
+            padding-bottom: 0;
             z-index: 999;
             flex-shrink: 0;
         }
@@ -222,16 +188,7 @@
 
         /* Home Indicator (iOS style bar at the very bottom) */
         .home-indicator {
-            width: 134px;
-            height: 5px;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 100px;
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            pointer-events: none;
+            display: none;
         }
 
         /* ==========================================================================
@@ -629,7 +586,16 @@
         }
 
         .timeline-step.completed .step-card {
-            opacity: 0.65;
+            opacity: 0.55;
+            cursor: pointer;
+            transition: opacity var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+        }
+        .timeline-step.completed .step-card:hover,
+        .timeline-step.completed .step-card:active {
+            opacity: 0.95;
+            transform: scale(0.99);
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
         }
 
         .step-header {
@@ -721,6 +687,72 @@
             padding: 10px;
             font-size: 12px;
             border-radius: 8px;
+        }
+
+        /* Collapsible gallery styles */
+        .gallery-img-wrapper {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .gallery-img-wrapper:active {
+            transform: scale(0.97);
+        }
+        
+        /* Premium Glassmorphic Fullscreen Image Zoom Modal */
+        .zoom-modal {
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(7, 7, 13, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .zoom-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .zoom-content {
+            width: 92%;
+            max-width: 440px;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .zoom-modal.active .zoom-content {
+            transform: scale(1);
+        }
+        .zoom-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: var(--color-text-main);
+            font-size: 32px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-glass-border);
+            transition: background var(--transition-fast);
+        }
+        .zoom-close:active {
+            background: rgba(255,255,255,0.15);
         }
 
         /* ==========================================================================
@@ -1239,8 +1271,8 @@
                             <span class="info-val" style="font-size: 11px; font-weight: 800; white-space: nowrap;">📅 5월 21일 (목)</span>
                         </div>
                         <div class="info-card">
-                            <span class="info-label">출발 예정</span>
-                            <span class="info-val" style="font-size: 11px; font-weight: 800;">07:00 AM</span>
+                            <span class="info-label">출발 안내</span>
+                            <span class="info-val" style="font-size: 9.5px; font-weight: 800; white-space: nowrap;">화서역에서 07:30 이전 출발</span>
                         </div>
                         <div class="info-card">
                             <span class="info-label">소요 시간</span>
@@ -1249,6 +1281,7 @@
                     </div>
                     
                     <button id="btn-start" class="btn btn-primary btn-block animate-pulse">길찾기 가이드 시작</button>
+                    <div style="font-size: 10px; color: var(--color-text-muted); text-align: center; margin-top: 14px; font-weight: 700; opacity: 0.6; letter-spacing: 1px;">제작 : 명인중학교</div>
                 </div>
             </section>
 
@@ -1266,16 +1299,7 @@
                 </header>
 
                 <div class="screen-scroll-container">
-                    <!-- Progress Card -->
-                    <div class="progress-card">
-                        <div class="progress-info">
-                            <span id="journey-status">화서역 출발 준비 중</span>
-                            <span id="journey-percentage">0%</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="route-progress-bar" style="width: 0%;"></div>
-                        </div>
-                    </div>
+
 
                     <!-- Steps Timeline -->
                     <div class="timeline-container" id="timeline-list">
@@ -1510,6 +1534,12 @@
 
         <!-- Home Indicator (iOS Style) -->
         <div class="home-indicator"></div>
+        
+        <!-- Image Zoom Modal Overlay -->
+        <div id="image-zoom-modal" class="zoom-modal hidden" onclick="closeZoomModal()">
+            <span class="zoom-close" onclick="closeZoomModal()">&times;</span>
+            <img class="zoom-content" id="zoomed-image" alt="현장 확대 안내도">
+        </div>
     </div>
 
     <!-- Core Interactive Embedded JavaScript -->
@@ -1528,7 +1558,9 @@
                     details: "화서역 1호선 승강장에서 수원/서동탄/신창 방면 열차에 탑승하세요. 수원역까지 1정거장 이동합니다.",
                     time: "3분",
                     stations: "1개역",
-                    tip: "출발 시간은 아침 7:00입니다. 지각하지 말고 조원들과 일찍 집결해 대기하세요!"
+                    warning: "모두 모였으면 출발 전에 담임 선생님에게 보고하세요.",
+                    tip: "출발 시간은 아침 7:30 이전입니다. 지각하지 말고 조원들과 일찍 집결해 대기하세요!",
+                    images: ["assets/extracted_img_3_5.png", "assets/extracted_img_3_6.png"]
                 },
                 {
                     id: "go-step-2",
@@ -1538,18 +1570,20 @@
                     details: "1호선 하차 후 지하 환승 통로로 이동하여 노란색 수인분당선 이정표를 보고 전용 개찰구로 가세요.",
                     time: "5분",
                     stations: "도보 이동",
-                    warning: "중요! 교통카드를 찍고 환승 게이트를 꼭 통과해야 환승 처리가 됩니다."
+                    warning: "중요! 교통카드를 찍고 환승 게이트를 꼭 통과해야 환승 처리가 됩니다.",
+                    images: ["assets/extracted_img_4_8.png", "assets/extracted_img_4_9.png"]
                 },
                 {
                     id: "go-step-3",
                     title: "수인분당선 탑승 (수원 ➔ 기흥)",
                     line: "수인분당선",
                     lineClass: "tag-suin",
-                    details: "수인분당선 승강장에서 반드시 ★왕십리행★ 열차에 탑승하세요. 기흥역까지 10정거장 이동합니다.",
+                    details: "수인분당선 승강장에서 반드시 ★왕십리행★ 열차에 탑승하세요. 기흥역까지 8정거장 이동합니다.",
                     time: "20분",
-                    stations: "10개역",
+                    stations: "8개역",
                     warning: "절대로 인천행 열차를 타면 안 됩니다! 반대로 가게 됩니다.",
-                    tip: "기상시간 알람 소리를 잘 듣고 잠들지 마세요. 중간에 내리지 마세요!"
+                    tip: "기상시간 알람 소리를 잘 듣고 잠들지 마세요. 중간에 내리지 마세요!",
+                    images: ["assets/extracted_img_5_4.png", "assets/extracted_img_5_5.png"]
                 },
                 {
                     id: "go-step-4",
@@ -1559,7 +1593,8 @@
                     details: "기흥역에서 하차한 후 초록색 에버라인 용인경전철 이정표를 보고 환승 통로로 진입하여 개찰구 방향으로 가세요.",
                     time: "5분",
                     stations: "도보 이동",
-                    tip: "초록색 바닥 유도선이나 전용 화살표를 따라가면 아주 쉽습니다!"
+                    tip: "초록색 바닥 유도선이나 전용 화살표를 따라가면 아주 쉽습니다!",
+                    images: ["assets/extracted_img_6_6.png", "assets/extracted_img_6_7.png"]
                 },
                 {
                     id: "go-step-5",
@@ -1569,7 +1604,8 @@
                     details: "에버라인 경전철을 탑승하여 종점인 전대·에버랜드역까지 14정거장 이동합니다.",
                     time: "30분",
                     stations: "14개역",
-                    tip: "무인 경전철이라 맨 앞과 맨 뒤 창문으로 경치를 볼 수 있어요! 열차 안에서는 조용히 이동합시다."
+                    tip: "무인 경전철이라 맨 앞과 맨 뒤 창문으로 경치를 볼 수 있어요! 열차 안에서는 조용히 이동합시다.",
+                    images: ["assets/extracted_img_7_6.png", "assets/extracted_img_7_7.png"]
                 },
                 {
                     id: "go-step-6",
@@ -1579,7 +1615,8 @@
                     details: "전대·에버랜드역 하차 후 3번 출구 방향 개찰구로 나가세요. 개인 교통카드를 사용해 나갑니다.",
                     time: "3분",
                     stations: "하차",
-                    warning: "부정승차 시 요금의 30배 부과금이 징수됩니다. 절대 카드를 나눠 찍거나 무단 통과하지 마세요."
+                    warning: "부정승차 시 요금의 30배 부과금이 징수됩니다. 절대 카드를 나눠 찍거나 무단 통과하지 마세요.",
+                    images: ["assets/extracted_img_8_5.png", "assets/extracted_img_8_6.png"]
                 },
                 {
                     id: "go-step-7",
@@ -1589,7 +1626,8 @@
                     details: "3번 출구 앞 광장에 대기 중인 에버랜드 무료 셔틀버스에 조원들과 차례대로 탑승하여 정문으로 이동합니다.",
                     time: "5분",
                     stations: "셔틀버스",
-                    tip: "셔틀버스는 5~10분 간격으로 계속 운행해요. 정문에 내린 뒤 조별로 모입니다!"
+                    tip: "셔틀버스는 5~10분 간격으로 계속 운행해요. 정문에 내린 뒤 조별로 모입니다!",
+                    images: ["assets/everland_main_gate.png"]
                 }
             ],
             back: [
@@ -1598,7 +1636,7 @@
                     title: "에버랜드 정문 ➔ 셔틀버스 탑승",
                     line: "셔틀버스",
                     lineClass: "tag-shuttle",
-                    details: "에버랜드 퇴장 후 정문 앞 셔틀버스 정류장(5주차장 방면)에서 전대·에버랜드역으로 가는 무료 셔틀버스에 탑승하세요.",
+                    details: "에버랜드 퇴장 후 정문 앞 셔틀버스 정류장(2주차장 방면)에서 전대·에버랜드역으로 가는 무료 셔틀버스에 탑승하세요.",
                     time: "5분",
                     stations: "셔틀버스",
                     tip: "물건을 잃어버리지 않았는지 탑승 전에 꼭 가방을 확인하세요!"
@@ -1628,9 +1666,9 @@
                     title: "수인분당선 탑승 (기흥 ➔ 수원역)",
                     line: "수인분당선",
                     lineClass: "tag-suin",
-                    details: "수인분당선 승강장에서 인천/고색/수원 방면 열차에 탑승하여 수원역까지 10정거장 이동합니다.",
+                    details: "수인분당선 승강장에서 인천/고색/수원 방면 열차에 탑승하여 수원역까지 8정거장 이동합니다.",
                     time: "20분",
-                    stations: "10개역",
+                    stations: "8개역",
                     warning: "피곤해서 깊이 잠들면 수원역을 지나쳐 인천까지 갈 수 있으니 꼭 정신을 차리고 알람을 켜두세요!"
                 },
                 {
@@ -1661,6 +1699,7 @@
                     details: "화서역 개찰구에 교통카드를 찍고 밖으로 나옵니다. 안전하게 귀가하고 현장체험학습을 마무리합니다.",
                     time: "2분",
                     stations: "도착",
+                    warning: "중요! 모둠별로 인증샷을 찍고 담임 선생님에게 보고하세요.",
                     tip: "오늘 모두 안전하게 규칙을 지켜줘서 훌륭합니다! 수고하셨습니다."
                 }
             ]
@@ -1673,7 +1712,7 @@
             { id: "chk-teacher-tel", text: "담임 선생님 연락처 확인 및 저장 완료!", warning: true },
             { id: "chk-promise", text: "만날 장소와 귀가 집결 시간 기억 완료!", warning: false },
             { id: "chk-card", text: "교통카드 잔액 넉넉히 충전 완료! (현금 승차 절대 불가)", warning: true },
-            { id: "chk-arrived", text: "아침 07:00까지 화서역 약속장소 도착 완료!", warning: false },
+            { id: "chk-arrived", text: "화서역에서 07:30 이전 출발 완료!", warning: false },
             { id: "chk-board1", text: "1호선 (수원역 방면) 탑승 완료!", warning: false },
             { id: "chk-trans1", text: "수원역 하차 후 수인분당선 환승 통로 진입 완료!", warning: false },
             { id: "chk-bound", text: "수인분당선 '왕십리행' 탑승 확인 완료! (인천행 아님!)", warning: true },
@@ -1924,8 +1963,10 @@
                 stepElement.id = step.id;
                 
                 let cardHtml = `
-                    <div class="timeline-bullet">${isCompleted ? '✓' : index + 1}</div>
-                    <div class="step-card">
+                    <div class="timeline-bullet" onclick="onBulletOrCardClick(${index}, event)" style="cursor: pointer;">${isCompleted ? '✓' : index + 1}</div>
+                    <div class="step-card" onclick="onBulletOrCardClick(${index}, event)" style="cursor: pointer; position: relative;">
+                        ${isCompleted ? `<span style="position: absolute; top: 12px; right: 12px; font-size: 9px; color: var(--color-secondary); font-weight: 800; background: rgba(6, 182, 212, 0.1); padding: 2px 6px; border-radius: 4px;">완료됨</span>` : ''}
+                        ${isActive ? `<span style="position: absolute; top: 12px; right: 12px; font-size: 9px; color: var(--color-primary); font-weight: 800; background: rgba(139, 92, 246, 0.15); padding: 2px 6px; border-radius: 4px; animation: pulse 2s infinite;">진행 중</span>` : ''}
                         <div class="step-header">
                             <h4 class="step-title">${step.title}</h4>
                             <span class="step-line-tag ${step.lineClass}">${step.line}</span>
@@ -1954,17 +1995,20 @@
                         </div>
                 `;
                 
-                if (isActive && index < steps.length - 1) {
+                if (step.images && step.images.length > 0) {
                     cardHtml += `
-                        <button class="btn btn-secondary btn-block step-action-btn" onclick="completeStep(${index})">
-                            이 단계 완료하고 다음으로 ➔
-                        </button>
-                    `;
-                } else if (isActive && index === steps.length - 1) {
-                    cardHtml += `
-                        <button class="btn btn-primary btn-block step-action-btn animate-pulse" onclick="completeStep(${index})">
-                            🎉 최종 목적지 도착 완료!
-                        </button>
+                        <div class="step-gallery-toggle" onclick="toggleStepGallery('${step.id}', event)" style="margin-top: 12px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--color-secondary); cursor: pointer; font-weight: 700; background: rgba(6, 182, 212, 0.08); padding: 8px 12px; border-radius: 8px; border: 1px dashed rgba(6, 182, 212, 0.2);">
+                            <span style="display: flex; align-items: center; gap: 6px;">🗺️ 현장 사진 보기</span>
+                            <span class="gallery-toggle-icon" id="toggle-icon-${step.id}" style="font-size: 10px; transition: transform var(--transition-fast);">▼</span>
+                        </div>
+                        <div class="step-gallery hidden" id="gallery-${step.id}" style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+                            ${step.images.map((imgSrc, imgIdx) => `
+                                <div class="gallery-img-wrapper" style="position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--color-glass-border); background: rgba(0,0,0,0.3); cursor: zoom-in;">
+                                    <img src="${imgSrc}" alt="현장 안내도" style="width: 100%; height: auto; display: block;" onclick="zoomGalleryImage('${imgSrc}', event)">
+                                    <span style="position: absolute; top: 8px; left: 8px; font-size: 10px; background: rgba(13, 13, 24, 0.75); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; color: #fff; font-weight: 600; border: 1px solid rgba(255,255,255,0.08);">안내도 ${imgIdx + 1} (클릭 시 확대)</span>
+                                </div>
+                            `).join('')}
+                        </div>
                     `;
                 }
                 
@@ -1973,6 +2017,17 @@
                 timelineList.appendChild(stepElement);
             });
         }
+
+        window.onBulletOrCardClick = function(index, event) {
+            if (event && (event.target.closest('.step-gallery-toggle') || event.target.closest('.step-gallery') || event.target.closest('.gallery-img-wrapper'))) {
+                return;
+            }
+            if (index === appState.activeStepIndex) {
+                completeStep(index);
+            } else {
+                goToStep(index);
+            }
+        };
 
         window.completeStep = function(index) {
             const steps = ROUTE_DATA[appState.direction];
@@ -1995,12 +2050,77 @@
                 updateRouteProgressBar();
                 
                 setTimeout(() => {
-                    const activeElem = document.querySelector(".timeline-step.active");
+                    const activeElem = document.querySelector(".timeline-step.active") || document.querySelector(".timeline-completion-card");
                     if (activeElem) {
                         activeElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 }, 150);
             }
+        };
+
+        window.goToStep = function(index) {
+            const steps = ROUTE_DATA[appState.direction];
+            if (index >= 0 && index <= steps.length) {
+                appState.activeStepIndex = index;
+                if (appState.direction === "go") {
+                    appState.activeStepIndexGo = index;
+                } else {
+                    appState.activeStepIndexBack = index;
+                }
+                saveStepToStorage();
+                triggerVibration(40);
+                renderTimeline();
+                updateRouteProgressBar();
+                
+                setTimeout(() => {
+                    const activeElem = document.querySelector(".timeline-step.active") || document.querySelector(".timeline-completion-card");
+                    if (activeElem) {
+                        activeElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        };
+
+        window.resetTimeline = function() {
+            if (confirm("경로 진행상황을 처음으로 리셋하시겠습니까?")) {
+                goToStep(0);
+            }
+        };
+
+        window.toggleStepGallery = function(stepId, event) {
+            if (event) event.stopPropagation();
+            const gallery = document.getElementById(`gallery-${stepId}`);
+            const icon = document.getElementById(`toggle-icon-${stepId}`);
+            if (gallery.classList.contains("hidden")) {
+                gallery.classList.remove("hidden");
+                icon.textContent = "▲";
+                triggerVibration(45);
+            } else {
+                gallery.classList.add("hidden");
+                icon.textContent = "▼";
+                triggerVibration(25);
+            }
+        };
+
+        window.zoomGalleryImage = function(imgSrc, event) {
+            if (event) event.stopPropagation();
+            const modal = document.getElementById("image-zoom-modal");
+            const zoomedImg = document.getElementById("zoomed-image");
+            zoomedImg.src = imgSrc;
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.add("active");
+            }, 10);
+            triggerVibration(60);
+        };
+
+        window.closeZoomModal = function() {
+            const modal = document.getElementById("image-zoom-modal");
+            modal.classList.remove("active");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300);
+            triggerVibration(30);
         };
 
         function updateRouteProgressBar() {
@@ -2011,16 +2131,20 @@
             const percentageText = document.getElementById("journey-percentage");
             
             const percentage = Math.round((appState.activeStepIndex / totalSteps) * 100);
-            progressFill.style.width = `${percentage}%`;
-            percentageText.textContent = `${percentage}%`;
+            if (progressFill) progressFill.style.width = `${percentage}%`;
+            if (percentageText) percentageText.textContent = `${percentage}%`;
             
-            if (appState.activeStepIndex === 0) {
-                statusText.textContent = appState.direction === "go" ? "화서역 출발 대기 중" : "에버랜드 출발 대기 중";
-            } else if (appState.activeStepIndex === totalSteps) {
-                statusText.textContent = appState.direction === "go" ? "에버랜드 무사히 도착! 🎡" : "화서역 도착! 귀가 완료 🏠";
-            } else {
-                const currentStep = steps[appState.activeStepIndex];
-                statusText.textContent = `${currentStep.title} 진행 중`;
+            if (statusText) {
+                if (appState.activeStepIndex === 0) {
+                    statusText.textContent = appState.direction === "go" ? "화서역 출발 대기 중" : "에버랜드 출발 대기 중";
+                } else if (appState.activeStepIndex === totalSteps) {
+                    statusText.textContent = appState.direction === "go" ? "에버랜드 무사히 도착! 🎡" : "화서역 도착! 귀가 완료 🏠";
+                } else {
+                    const currentStep = steps[appState.activeStepIndex];
+                    if (currentStep) {
+                        statusText.textContent = `${currentStep.title} 진행 중`;
+                    }
+                }
             }
         }
 
