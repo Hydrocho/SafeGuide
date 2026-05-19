@@ -402,7 +402,7 @@
 
         .splash-quick-info {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
             margin-top: 10px;
             margin-bottom: 20px;
@@ -1272,15 +1272,15 @@
                     <div class="splash-quick-info">
                         <div class="info-card">
                             <span class="info-label">일정 날짜</span>
-                            <span class="info-val" style="font-size: 11px; font-weight: 800; white-space: nowrap;">📅 5월 21일 (목)</span>
-                        </div>
-                        <div class="info-card">
-                            <span class="info-label">출발 안내</span>
-                            <span class="info-val" style="font-size: 9.5px; font-weight: 800; white-space: nowrap;">화서역에서 07:30 이전 출발</span>
+                            <span class="info-val" style="font-size: 12px; font-weight: 800;">📅 5월 21일 (목)</span>
                         </div>
                         <div class="info-card">
                             <span class="info-label">소요 시간</span>
-                            <span class="info-val" style="font-size: 11px; font-weight: 800;">최소 2시간</span>
+                            <span class="info-val" style="font-size: 12px; font-weight: 800;">⏱️ 최소 2시간</span>
+                        </div>
+                        <div class="info-card" style="grid-column: span 2;">
+                            <span class="info-label">출발 안내</span>
+                            <span class="info-val" style="font-size: 12.5px; font-weight: 800; color: #c084fc;">🚀 화서역에서 07:30 이전 출발</span>
                         </div>
                     </div>
                     
@@ -1939,12 +1939,14 @@
                 
                 let cardHtml = `
                     <div class="timeline-bullet" onclick="onBulletOrCardClick(${index}, event)" style="cursor: pointer;">${isCompleted ? '✓' : index + 1}</div>
-                    <div class="step-card" onclick="onBulletOrCardClick(${index}, event)" style="cursor: pointer; position: relative;">
-                        ${isCompleted ? `<span style="position: absolute; top: 12px; right: 12px; font-size: 9px; color: var(--color-secondary); font-weight: 800; background: rgba(6, 182, 212, 0.1); padding: 2px 6px; border-radius: 4px;">완료됨</span>` : ''}
-                        ${isActive ? `<span style="position: absolute; top: 12px; right: 12px; font-size: 9px; color: var(--color-primary); font-weight: 800; background: rgba(139, 92, 246, 0.15); padding: 2px 6px; border-radius: 4px; animation: pulse 2s infinite;">진행 중</span>` : ''}
+                    <div class="step-card" onclick="onBulletOrCardClick(${index}, event)" style="cursor: pointer;">
                         <div class="step-header">
                             <h4 class="step-title">${step.title}</h4>
-                            <span class="step-line-tag ${step.lineClass}">${step.line}</span>
+                            <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                                <span class="step-line-tag ${step.lineClass}">${step.line}</span>
+                                ${isCompleted ? `<span style="font-size: 9.5px; color: var(--color-secondary); font-weight: 800; background: rgba(6, 182, 212, 0.15); padding: 2px 6px; border-radius: 4px; white-space: nowrap;">완료됨</span>` : ''}
+                                ${isActive ? `<span style="font-size: 9.5px; color: var(--color-primary); font-weight: 800; background: rgba(139, 92, 246, 0.2); padding: 2px 6px; border-radius: 4px; animation: pulse 2s infinite; white-space: nowrap;">진행 중</span>` : ''}
+                            </div>
                         </div>
                         <p class="step-details">${step.details}</p>
                 `;
