@@ -327,10 +327,14 @@
            ========================================================================== */
         #screen-splash {
             background-color: var(--color-bg-dark);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .splash-banner {
-            height: 42%;
+            height: 250px;
+            flex-shrink: 0;
             position: relative;
             overflow: hidden;
             display: flex;
